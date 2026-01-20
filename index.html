@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOREAD | Okuma Evreni</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@300;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="cyber-bg">
+    <div class="grid-overlay"></div>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="scan-line"></div>
+</div>
+
+<!-- Auth Scene -->
+<section id="auth-scene" class="scene">
+    <div class="cyber-container">
+        <div class="logo-wrapper">
+            <h1 class="cyber-logo">
+                <span class="glitch-text" data-text="BOREAD">BOREAD</span>
+            </h1>
+            <p class="tagline">SINIRLARIN ÖTESİNDE BİR DENEYİM</p>
+            <div class="logo-underline"></div>
+        </div>
+
+        <div class="auth-tabs">
+            <button class="tab-btn active" onclick="switchTab('login')">GİRİŞ</button>
+            <button class="tab-btn" onclick="switchTab('register')">KAYIT OL</button>
+        </div>
+
+        <div id="login-form" class="auth-form">
+            <div class="cyber-input">
+                <i class="fas fa-envelope"></i>
+                <input id="login-email" type="email" placeholder="E-posta adresiniz" autocomplete="email">
+                <div class="input-glow"></div>
+            </div>
+            
+            <div class="cyber-input">
+                <i class="fas fa-lock"></i>
+                <input id="login-pass" type="password" placeholder="Şifreniz" autocomplete="current-password">
+                <div class="input-glow"></div>
+            </div>
+            
+            <button class="cyber-btn primary" onclick="handleLogin()">
+                <span class="btn-text">GİRİŞ YAP</span>
+                <span class="btn-glow"></span>
+            </button>
+        </div>
+
+        <div id="register-form" class="auth-form hidden">
+            <div class="cyber-input">
+                <i class="fas fa-envelope"></i>
+                <input id="reg-email" type="email" placeholder="E-posta adresiniz" autocomplete="email">
+                <div class="input-glow"></div>
+            </div>
+            
+            <div class="cyber-input">
+                <i class="fas fa-lock"></i>
+                <input id="reg-pass" type="password" placeholder="Şifre (min. 8 karakter)" autocomplete="new-password">
+                <div class="input-glow"></div>
+            </div>
+
+            <div class="cyber-input">
+                <i class="fas fa-shield-halved"></i>
+                <input id="reg-pass-confirm" type="password" placeholder="Şifre Tekrar" autocomplete="new-password">
+                <div class="input-glow"></div>
+            </div>
+            
+            <button class="cyber-btn primary" onclick="handleRegister()">
+                <span class="btn-text">HESAP OLUŞTUR</span>
+                <span class="btn-glow"></span>
+            </button>
+        </div>
+
+        <div class="divider">
+            <span>YA DA</span>
+        </div>
+
+        <button class="google-btn" onclick="loginWithGoogle()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" alt="Google">
+            <span>Google ile Devam Et</span>
+            <div class="google-shine"></div>
+        </button>
+
+        <div class="auth-footer">
+            <p>Giriş yaparak <a href="#">Kullanım Şartları</a>'nı kabul etmiş olursunuz</p>
+        </div>
+    </div>
+</section>
+
+<!-- Onboarding Scene -->
+<section id="onboarding-scene" class="scene hidden">
+    <div class="cyber-container wide">
+        <div class="onboarding-header">
+            <div class="step-indicator">
+                <div class="step active">
+                    <div class="step-circle">1</div>
+                    <span>Profil</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-circle">2</div>
+                    <span>İlgi Alanları</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">
+            <span class="glitch-text" data-text="PROFİLİNİ OLUŞTUR">PROFİLİNİ OLUŞTUR</span>
+        </h2>
+
+        <div class="profile-setup">
+            <div class="avatar-upload">
+                <div class="avatar-preview" id="avatar-preview">
+                    <i class="fas fa-user"></i>
+                </div>
+                <button class="upload-btn" onclick="document.getElementById('avatar-input').click()">
+                    <i class="fas fa-camera"></i>
+                    <span>Fotoğraf Ekle</span>
+                </button>
+                <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="previewAvatar(event)">
+            </div>
+
+            <div class="form-grid">
+                <div class="cyber-input">
+                    <i class="fas fa-at"></i>
+                    <input id="new-username" placeholder="Kullanıcı Adı (benzersiz)" oninput="checkUsername(this.value)">
+                    <div class="input-glow"></div>
+                    <span class="input-status" id="username-status"></span>
+                </div>
+                
+                <div class="cyber-input">
+                    <i class="fas fa-calendar-days"></i>
+                    <input id="birth-date" type="date">
+                    <div class="input-glow"></div>
+                </div>
+            </div>
+
+            <div class="cyber-input">
+                <i class="fas fa-pen"></i>
+                <textarea id="bio-text" placeholder="Biyografi (150 karakter)" maxlength="150" rows="3"></textarea>
+                <div class="input-glow"></div>
+            </div>
+
+            <div class="interests-section">
+                <h3>İlgi Alanlarını Seç <span class="badge" id="selected-count">0/6</span></h3>
+                <div id="hobi-list" class="interests-grid"></div>
+            </div>
+
+            <button id="finish-btn" class="cyber-btn primary large" onclick="completeRegistration()" disabled>
+                <span class="btn-text">MACERAYA BAŞLA</span>
+                <i class="fas fa-rocket"></i>
+                <span class="btn-glow"></span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Main Scene -->
+<main id="main-scene" class="scene hidden">
+    <nav class="cyber-nav">
+        <div class="nav-left">
+            <h1 class="nav-logo" onclick="showPage('home')">BOREAD</h1>
+        </div>
+        <div class="nav-center">
+            <button class="nav-link active" onclick="showPage('home')"><i class="fas fa-home"></i> <span>Ana Sayfa</span></button>
+            <button class="nav-link" onclick="showPage('explore')"><i class="fas fa-compass"></i> <span>Keşfet</span></button>
+            <button class="nav-link" onclick="showPage('library')"><i class="fas fa-book-open"></i> <span>Kütüphanem</span></button>
+            <button class="nav-link" onclick="showPage('write')"><i class="fas fa-pen"></i> <span>Yaz</span></button>
+            <button class="nav-link" onclick="showPage('messages')"><i class="fas fa-comments"></i> <span>Mesajlar</span></button>
+        </div>
+        <div class="nav-right">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Ara..." id="global-search" oninput="globalSearch(this.value)">
+            </div>
+            <button class="nav-icon" onclick="showPage('notifications')">
+                <i class="fas fa-bell"></i>
+                <span class="notif-badge" id="notif-count">0</span>
+            </button>
+            <div class="user-menu" onclick="toggleUserMenu()">
+                <img id="user-avatar" src="" alt="Avatar" class="nav-avatar">
+                <span id="nav-username">Yükleniyor...</span>
+                <i class="fas fa-chevron-down"></i>
+                
+                <div class="user-dropdown" id="user-dropdown">
+                    <a href="#" onclick="showPage('profile', currentUser.uid)"><i class="fas fa-user"></i> Profilim</a>
+                    <a href="#" onclick="showPage('settings')"><i class="fas fa-cog"></i> Ayarlar</a>
+                    <a href="#" onclick="showPage('stats')"><i class="fas fa-chart-line"></i> İstatistiklerim</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" onclick="firebase.auth().signOut()" class="danger"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content" id="main-content">
+        <!-- Dynamic content loads here -->
+    </div>
+</main>
+
+<!-- Modals -->
+<div class="modal" id="book-create-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('book-create-modal')">&times;</span>
+        <h2>Yeni Kitap Oluştur</h2>
+        
+        <div class="cyber-input">
+            <i class="fas fa-book"></i>
+            <input id="book-title" placeholder="Kitap Başlığı">
+            <div class="input-glow"></div>
+        </div>
+
+        <div class="cyber-input">
+            <i class="fas fa-align-left"></i>
+            <textarea id="book-description" placeholder="Açıklama" rows="4"></textarea>
+            <div class="input-glow"></div>
+        </div>
+
+        <div class="form-grid">
+            <div class="cyber-input">
+                <i class="fas fa-layer-group"></i>
+                <select id="book-category">
+                    <option value="">Kategori Seç</option>
+                    <option value="korku">Korku</option>
+                    <option value="bilimkurgu">Bilim Kurgu</option>
+                    <option value="macera">Macera</option>
+                    <option value="psikoloji">Psikoloji</option>
+                    <option value="yazilim">Yazılım</option>
+                    <option value="felsefe">Felsefe</option>
+                    <option value="tarih">Tarih</option>
+                    <option value="biyografi">Biyografi</option>
+                    <option value="romantik">Romantik</option>
+                    <option value="fantastik">Fantastik</option>
+                    <option value="polisiye">Polisiye</option>
+                    <option value="siir">Şiir</option>
+                </select>
+                <div class="input-glow"></div>
+            </div>
+
+            <div class="cyber-input">
+                <i class="fas fa-palette"></i>
+                <input id="book-cover-color" type="color" value="#667eea">
+                <span style="margin-left: 10px;">Kapak Rengi</span>
+                <div class="input-glow"></div>
+            </div>
+        </div>
+
+        <div class="cyber-input">
+            <i class="fas fa-hashtag"></i>
+            <input id="book-tags" placeholder="Etiketler (virgülle ayır)">
+            <div class="input-glow"></div>
+        </div>
+
+        <button class="cyber-btn primary" onclick="createBook()">
+            <span class="btn-text">OLUŞTUR</span>
+            <span class="btn-glow"></span>
+        </button>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+<script src="app.js"></script>
+</body>
+                               </html>
