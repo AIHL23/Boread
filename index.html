@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boread</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;700&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="cyber-bg">
+    <div class="grid-overlay"></div>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="scan-line"></div>
+  </div>
+
+  <!-- AUTH SCENE -->
+  <section id="auth-scene" class="scene">
+    <div class="cyber-container">
+      <div class="logo-wrapper">
+        <h1 class="cyber-logo glitch-text">Boread</h1>
+        <p class="tagline">Discover • Read • Share</p>
+        <div class="logo-underline"></div>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="tab-btn active" onclick="switchTab('login')">Giriş</button>
+        <button class="tab-btn" onclick="switchTab('register')">Kayıt Ol</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form">
+        <div class="cyber-input">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="login-email" placeholder="E-posta">
+          <div class="input-glow"></div>
+        </div>
+        <div class="cyber-input">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="login-pass" placeholder="Şifre">
+          <div class="input-glow"></div>
+        </div>
+        <button type="button" class="cyber-btn primary" onclick="handleLogin()">
+          <span>Giriş Yap</span>
+          <div class="btn-glow"></div>
+        </button>
+        <div class="divider">veya</div>
+        <button type="button" class="google-btn" onclick="loginWithGoogle()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+          <span>Google ile Giriş</span>
+          <div class="google-shine"></div>
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="hidden">
+        <div class="cyber-input">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="reg-email" placeholder="E-posta">
+          <div class="input-glow"></div>
+        </div>
+        <div class="cyber-input">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="reg-pass" placeholder="Şifre">
+          <div class="input-glow"></div>
+        </div>
+        <div class="cyber-input">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="reg-pass-confirm" placeholder="Şifre Tekrar">
+          <div class="input-glow"></div>
+        </div>
+        <button type="button" class="cyber-btn primary" onclick="handleRegister()">
+          <span>Kayıt Ol</span>
+          <div class="btn-glow"></div>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ONBOARDING SCENE -->
+  <section id="onboarding-scene" class="scene hidden">
+    <div class="cyber-container wide">
+      <div class="avatar-upload">
+        <div id="avatar-preview" class="avatar-preview">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="cyber-input">
+          <i class="fas fa-user"></i>
+          <input type="text" id="new-username" placeholder="Kullanıcı Adı" oninput="checkUsername(this.value)">
+          <div id="username-status" class="input-status"></div>
+          <div class="input-glow"></div>
+        </div>
+        <div class="cyber-input">
+          <i class="fas fa-calendar"></i>
+          <input type="date" id="birth-date">
+          <div class="input-glow"></div>
+        </div>
+      </div>
+
+      <div class="interests-section">
+        <h3><i class="fas fa-star"></i> İlgi Alanlarını Seç <span id="selected-count">0/6</span></h3>
+        <div id="hobi-list" class="interests-grid"></div>
+      </div>
+
+      <button id="finish-btn" class="cyber-btn primary" onclick="completeRegistration()" disabled>
+        <span>Kaydı Tamamla</span>
+        <div class="btn-glow"></div>
+      </button>
+    </div>
+  </section>
+
+  <!-- MAIN SCENE -->
+  <section id="main-scene" class="scene hidden">
+    <nav class="cyber-nav">
+      <div class="nav-left">
+        <span class="nav-logo">Boread</span>
+      </div>
+      <div class="nav-center">
+        <button class="nav-link active"><i class="fas fa-home"></i><span>Ana Sayfa</span></button>
+        <button class="nav-link"><i class="fas fa-book"></i><span>Kitaplar</span></button>
+      </div>
+      <div class="nav-right">
+        <div class="user-menu" onclick="toggleUserMenu()">
+          <img id="user-avatar" class="nav-avatar" src="" alt="Avatar">
+          <span id="nav-username">Kullanıcı</span>
+          <i class="fas fa-chevron-down"></i>
+          <div id="user-dropdown" class="user-dropdown">
+            <a href="#"><i class="fas fa-user"></i> Profil</a>
+            <a href="#"><i class="fas fa-cog"></i> Ayarlar</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="danger"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="welcome-hero">
+        <div class="hero-content">
+          <h1 class="hero-title">Hoş geldin, <span class="highlight" id="welcome-msg">Kullanıcı</span></h1>
+          <p class="hero-subtitle">Okumaya ve keşfetmeye başla 🚀</p>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- App.js -->
+  <script src="app.js"></script>
+</body>
+          </html>
